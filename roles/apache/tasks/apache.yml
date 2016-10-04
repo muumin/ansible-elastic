@@ -1,0 +1,8 @@
+---
+- name: yum install
+  yum:
+    name: "{{item}}"
+    state: present
+  with_items:
+    - httpd
+  notify: restart apache

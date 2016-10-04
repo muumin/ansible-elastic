@@ -1,0 +1,77 @@
+---
+- name: Elasticのリポジトリキーを追加
+  rpm_key:
+    key: https://packages.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: elastic.repoを追加
+  copy:
+    src: elastic.repo
+    dest: /etc/yum.repos.d/elastic.repo
+
+- name: yum install
+  yum:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - which
+    - java
+    - elasticsearch
+    - kibana
+    - logstash
+  notify: restart elastic
+
+- name: プラグインのインストール
+  elasticsearch_plugin:
+    state: present
+    name: "{{ item }}"
+  with_items:
+    - lmenezes/elasticsearch-kopf
+
+- name: Javaバージョン変更による再起動
+  command: echo "java update."
+  when: install_java
+  notify: restart elastic
+
+- name: elasticsearch.yml変更
+  lineinfile:
+    dest: /etc/elasticsearch/elasticsearch.yml
+    state: present
+    backrefs: yes
+    regexp: "^# network.host:"
+    line: "network.host: 192.168.33.10"
+  notify: restart elastic
+
+- name: elasticsearch.yml変更
+  lineinfile:
+    dest: /opt/kibana/config/kibana.yml
+    state: present
+    backrefs: yes
+    regexp: '^# elasticsearch.url: "http://localhost:9200"'
+    line: 'elasticsearch.url: "http://192.168.33.10:9200"'
+  notify: restart elastic
+
+- name: logstashのディレクトリ作成
+  file:
+    path: /etc/logstash/conf.d
+    owner: logstash
+    group: root
+    mode: 0750
+    state: directory
+    recurse: no
+    follow: yes
+
+- name: logstashのapache設定コピー
+  copy:
+    src: apache_import.conf
+    dest: /etc/logstash/conf.d/
+    owner: logstash
+    group: root
+    mode: 0640
+  notify: restart elastic
+
+- name: logstashのディレクトリ作成
+  file:
+    path: /var/log/httpd
+    mode: 0755
+    recurse: no

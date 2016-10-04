@@ -1,0 +1,12 @@
+---
+java:
+  download:
+    url: http://download.oracle.com/otn-pub/java/jdk/8u101-b13/jdk-8u101-linux-x64.rpm
+    checksum: "sha256:48154db52c451f2fefb68a39c57a09186e0cf9ed98f05269bc32821cb1bcacd6"
+    path: /usr/local/src/jdk-8u101-linux-x64.rpm
+  home: /usr/java/jdk1.8.0_101/jre
+  # download:
+  #   url: http://download.oracle.com/otn-pub/java/jdk/8u102-b14/jdk-8u102-linux-x64.rpm
+  #   checksum: "sha256:1214cad443522611173fa1252818dcea48f9bbeb8ea3bfce5e11eb0b696a968e"
+  #   path: /usr/local/src/jdk-8u102-linux-x64.rpm
+  # home: /usr/java/jdk1.8.0_102/jre

@@ -1,0 +1,9 @@
+- name: tomcat server
+  hosts: targets
+  user: vagrant
+  become: yes
+  roles:
+    - selinux
+    - apache
+    - java
+    - elastic

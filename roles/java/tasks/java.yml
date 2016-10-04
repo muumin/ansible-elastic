@@ -1,0 +1,31 @@
+---
+- name: yum install.
+  yum:  name={{ item }} state=present
+  with_items:
+    - wget
+
+- name: download jdk.
+  get_url:
+    url: "{{ java.download.url }}"
+    dest: "{{ java.download.path }}"
+    checksum: "{{ java.download.checksum }}"
+    headers: "Cookie:' gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'"
+    validate_certs: no
+    # force: yes
+    mode: 0744
+  register: result_zip_download
+
+- name: install jdk.
+  yum: name={{ java.download.path }}
+  register: result_yum_install
+
+- name: java version.
+  alternatives: name=java path={{ java.home }}/bin/java
+  register: result_alternatives
+
+- name:
+  set_fact:
+    install_java: "{{ result_zip_download | changed or result_yum_install | changed or result_alternatives | changed }}"
+
+# - debug:
+#     var: install_java
