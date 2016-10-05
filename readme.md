@@ -1,5 +1,7 @@
 # logstash + elasticsearch + kibanaの動作確認
 
+お手軽にapcheのアクセスログを可視化。
+
 ## Ansibleで環境構築
 
 Vagrant + ansibleで環境を構築します。
