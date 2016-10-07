@@ -6,3 +6,9 @@
   with_items:
     - httpd
   notify: restart apache
+
+- name: ログディレクトリのパーミッション変更
+  file:
+    path: /var/log/httpd
+    mode: 0755
+    recurse: no

@@ -69,9 +69,3 @@
     group: root
     mode: 0640
   notify: restart elastic
-
-- name: logstashのディレクトリ作成
-  file:
-    path: /var/log/httpd
-    mode: 0755
-    recurse: no
